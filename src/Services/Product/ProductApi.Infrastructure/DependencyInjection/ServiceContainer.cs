@@ -1,10 +1,11 @@
 ﻿using BuildingBlocks.Web.DependencyInjection;
+using Microsoft.AspNetCore.Builder; // Ensure this is included for IApplicationBuilder
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductApi.Application.Interfaces;
+using ProductApi.Application.Mappings;
 using ProductApi.Infrastructure.Data;
 using ProductApi.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Builder; // Ensure this is included for IApplicationBuilder
 
 namespace ProductApi.Infrastructure.DependencyInjection
 {
@@ -25,6 +26,12 @@ namespace ProductApi.Infrastructure.DependencyInjection
             //SharedServiceContainer.AddSharedServices<ProductDbContext>(services, config, config["MySerilog:FileName"]!);
 
             services.AddScoped<IProductRepository, ProductRepository>();
+
+            //register AutoMapper profiles from the assembly containing ProductMappingProfile
+            services.AddAutoMapper(
+                cfg => { },
+                typeof(ProductMappingProfile).Assembly
+            );
 
             return services;
         }
